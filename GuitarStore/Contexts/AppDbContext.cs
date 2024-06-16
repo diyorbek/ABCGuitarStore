@@ -130,5 +130,19 @@ public class AppDbContext : DbContext
             .HasOne(oi => oi.SellableProduct)
             .WithMany(sp => sp.OrderItems)
             .HasForeignKey(oi => oi.SellableProductId);
+
+
+        SeedDb(modelBuilder);
+    }
+
+    private void SeedDb(ModelBuilder modelBuilder)
+    {
+        // modelBuilder.Entity<Product>(p => { p.HasData(sellableProducts); });
+
+        // modelBuilder.Entity<ProductStore>(p =>
+        // {
+        //
+        //     p.HasData(data);
+        // });
     }
 }

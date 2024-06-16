@@ -25,10 +25,10 @@ public class StoreController(IStoreService storeService) : ControllerBase
         var result = await storeService.GetStoreSellableProductsAsync(storeId, filter);
         return Ok(new { store, result });
     }
-    
+
     [HttpGet]
     [Route("{storeId:Guid}/{productId:guid}", Name = "GetSellableProduct")]
-    public async Task<IActionResult> GetProduct(Guid storeId,Guid productId)
+    public async Task<IActionResult> GetProduct(Guid storeId, Guid productId)
     {
         var result = await storeService.GetSellableProductAsync(productId);
         return Ok(result);
