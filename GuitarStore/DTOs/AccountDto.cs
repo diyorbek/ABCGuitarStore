@@ -23,5 +23,5 @@ public abstract class AccountDto
 
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] [Length(1, 255)] public string Password { get; set; }
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 }

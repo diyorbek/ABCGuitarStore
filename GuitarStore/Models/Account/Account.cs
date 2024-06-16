@@ -7,7 +7,7 @@ public abstract class Account
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
