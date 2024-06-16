@@ -13,6 +13,7 @@ public class Store
 
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] public Address Address { get; set; } // Complex attribute
+    [Required] public string Image { get; set; }
 
     public virtual ICollection<ProductStore> ProductStores { get; set; }
     public virtual ICollection<Employee> Employees { get; set; }

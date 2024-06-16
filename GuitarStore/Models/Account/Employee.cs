@@ -7,10 +7,10 @@ namespace GuitarStore.Models;
 
 public class Employee : Account
 {
-    private static int maxCommissionRate;
-    private int? commissionRate;
-    private string contractNumber;
-    private string phoneNumber;
+    private static int _maxCommissionRate;
+    private int? _commissionRate;
+    private string _contractNumber;
+    private string _phoneNumber;
 
     public Employee(string email, string name, string password, int? commissionRate, string contractNumber,
         string phoneNumber, EmployeePositionEnum positions, PrivilegeLevel? privilegeLevel, Guid storeId)
@@ -38,25 +38,25 @@ public class Employee : Account
 
     public static int MaxCommissionRate
     {
-        get => maxCommissionRate;
+        get => _maxCommissionRate;
         set
         {
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value),
                     "Max commission rate must be greater than or equal to 0.");
-            maxCommissionRate = value;
+            _maxCommissionRate = value;
         }
     }
-    
+
     public int? CommissionRate
     {
-        get => commissionRate;
+        get => _commissionRate;
         set
         {
             if (value < 0 || value > MaxCommissionRate)
                 throw new ArgumentOutOfRangeException(nameof(value),
                     $"Commission rate must be between 0 and {MaxCommissionRate}.");
-            commissionRate = value;
+            _commissionRate = value;
         }
     }
 
@@ -64,12 +64,12 @@ public class Employee : Account
     [Length(1, 255)]
     public string ContractNumber
     {
-        get => contractNumber;
+        get => _contractNumber;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Contract number cannot be null or empty.", nameof(value));
-            contractNumber = value;
+            _contractNumber = value;
         }
     }
 
@@ -78,12 +78,12 @@ public class Employee : Account
     [Phone]
     public string PhoneNumber
     {
-        get => phoneNumber;
+        get => _phoneNumber;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Phone number cannot be null or empty.", nameof(value));
-            phoneNumber = value;
+            _phoneNumber = value;
         }
     }
 

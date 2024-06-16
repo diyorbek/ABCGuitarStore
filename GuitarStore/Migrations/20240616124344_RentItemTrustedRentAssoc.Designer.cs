@@ -3,6 +3,7 @@ using System;
 using GuitarStore.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarStore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616124344_RentItemTrustedRentAssoc")]
+    partial class RentItemTrustedRentAssoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
-
-            modelBuilder.Entity("CustomerOrder", b =>
-                {
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("OrdersOrderId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("CustomersId", "OrdersOrderId");
-
-                    b.HasIndex("OrdersOrderId");
-
-                    b.ToTable("CustomerOrder", (string)null);
-                });
 
             modelBuilder.Entity("GuitarStore.Models.Account", b =>
                 {
@@ -88,47 +76,6 @@ namespace GuitarStore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers");
-                });
-
-            modelBuilder.Entity("GuitarStore.Models.Product.Order", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("GuitarStore.Models.Product.OrderItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("SellableProductId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("SellableProductId");
-
-                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.Product", b =>
@@ -261,10 +208,6 @@ namespace GuitarStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -354,40 +297,6 @@ namespace GuitarStore.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Trusted");
-                });
-
-            modelBuilder.Entity("CustomerOrder", b =>
-                {
-                    b.HasOne("GuitarStore.Models.Customer", null)
-                        .WithMany()
-                        .HasForeignKey("CustomersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GuitarStore.Models.Product.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GuitarStore.Models.Product.OrderItem", b =>
-                {
-                    b.HasOne("GuitarStore.Models.Product.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GuitarStore.Models.Product.SellableProduct", "SellableProduct")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("SellableProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("SellableProduct");
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.ProductManufacturer", b =>
@@ -503,11 +412,6 @@ namespace GuitarStore.Migrations
                     b.Navigation("ProductManufacturers");
                 });
 
-            modelBuilder.Entity("GuitarStore.Models.Product.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
             modelBuilder.Entity("GuitarStore.Models.Product.Product", b =>
                 {
                     b.Navigation("ProductManufacturers");
@@ -530,11 +434,6 @@ namespace GuitarStore.Migrations
             modelBuilder.Entity("GuitarStore.Models.Product.RentableProduct", b =>
                 {
                     b.Navigation("RentableItems");
-                });
-
-            modelBuilder.Entity("GuitarStore.Models.Product.SellableProduct", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("GuitarStore.Models.TrustedCustomer", b =>

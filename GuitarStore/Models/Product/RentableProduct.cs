@@ -22,7 +22,6 @@ public class RentableProduct(
     public float PricePerRentalDay { get; set; } = pricePerRentalDay;
 
     public virtual ICollection<RentableItem> RentableItems { get; }
-    
+
     public static int MaxRentDays { get; set; }
-    
 }

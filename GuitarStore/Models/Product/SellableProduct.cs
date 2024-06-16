@@ -19,4 +19,6 @@ public class SellableProduct(
     public float Price { get; set; } = price;
 
     [Required] public bool IsUsed { get; set; } = isUsed;
+
+    public virtual ICollection<OrderItem> OrderItems { get; set; }
 }

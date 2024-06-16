@@ -26,6 +26,8 @@ public class AppDbContext : DbContext
     public DbSet<ProductStore> ProductStores { get; set; }
     public DbSet<RentableProduct> RentableProducts { get; set; }
     public DbSet<RentableItem> RentableItems { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,12 +94,41 @@ public class AppDbContext : DbContext
             .HasOne(e => e.Store)
             .WithMany(s => s.Employees)
             .HasForeignKey(e => e.StoreId);
-        
+
         // RentableItem config
         modelBuilder.Entity<RentableProduct>()
             .HasMany(rp => rp.RentableItems)
             .WithOne(ri => ri.RentableProduct)
             .HasForeignKey(ri => ri.RentableProductId)
-            .OnDelete(DeleteBehavior.Cascade); // Cascade delete
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete RentableItems
+
+        // Rent config
+        modelBuilder.Entity<RentableItem>()
+            .HasMany(ri => ri.Rents)
+            .WithOne(r => r.RentableItem)
+            .HasForeignKey(r => r.RentableItemId)
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete Rents
+
+        modelBuilder.Entity<TrustedCustomer>()
+            .HasMany(r => r.Rents)
+            .WithOne(tc => tc.TrustedCustomer)
+            .HasForeignKey(r => r.TrustedCustomerId);
+        // .OnDelete(DeleteBehavior.Cascade);
+
+        // Order config
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Orders)
+            .WithMany(o => o.Customers)
+            .UsingEntity(j => j.ToTable("CustomerOrder"));
+
+        modelBuilder.Entity<Order>()
+            .HasMany(o => o.OrderItems)
+            .WithOne(oi => oi.Order)
+            .HasForeignKey(oi => oi.OrderId);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(oi => oi.SellableProduct)
+            .WithMany(sp => sp.OrderItems)
+            .HasForeignKey(oi => oi.SellableProductId);
     }
 }
