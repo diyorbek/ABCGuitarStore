@@ -21,5 +21,8 @@ public class RentableProduct(
     [Range(1, 30000, ErrorMessage = "Price should be between 1 and 30K")]
     public float PricePerRentalDay { get; set; } = pricePerRentalDay;
 
+    public virtual ICollection<RentableItem> RentableItems { get; }
+    
     public static int MaxRentDays { get; set; }
+    
 }

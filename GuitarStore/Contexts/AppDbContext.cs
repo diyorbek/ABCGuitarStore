@@ -24,6 +24,8 @@ public class AppDbContext : DbContext
     public DbSet<ProductManufacturer> ProductManufacturers { get; set; }
     public DbSet<Store> Stores { get; set; }
     public DbSet<ProductStore> ProductStores { get; set; }
+    public DbSet<RentableProduct> RentableProducts { get; set; }
+    public DbSet<RentableItem> RentableItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -90,5 +92,12 @@ public class AppDbContext : DbContext
             .HasOne(e => e.Store)
             .WithMany(s => s.Employees)
             .HasForeignKey(e => e.StoreId);
+        
+        // RentableItem config
+        modelBuilder.Entity<RentableProduct>()
+            .HasMany(rp => rp.RentableItems)
+            .WithOne(ri => ri.RentableProduct)
+            .HasForeignKey(ri => ri.RentableProductId)
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete
     }
 }

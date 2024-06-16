@@ -18,9 +18,9 @@ public class EmployeeDto : AccountDto
         PrivilegeLevel = employee.PrivilegeLevel;
     }
 
-    private int CommissionRate { get; set; }
-    private string ContractNumber { get; set; }
-    private string PhoneNumber { get; set; }
-    private EmployeePositionEnum Positions { get; set; }
-    private PrivilegeLevel PrivilegeLevel { get; set; }
+    private int? CommissionRate { get; set; }
+    private string? ContractNumber { get; set; }
+    private string? PhoneNumber { get; set; }
+    private EmployeePositionEnum? Positions { get; set; }
+    private PrivilegeLevel? PrivilegeLevel { get; set; }
 }
