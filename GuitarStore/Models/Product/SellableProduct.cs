@@ -14,8 +14,9 @@ public class SellableProduct(
     : Product(categoryEnum, name, description, images,
         guitarType, usedWith)
 {
-    [Required] [Range(1, 30000, ErrorMessage = "Price should be between 1 and 30K")]
+    [Required]
+    [Range(1, 30000, ErrorMessage = "Price should be between 1 and 30K")]
     public float Price { get; set; } = price;
-    
+
     [Required] public bool IsUsed { get; set; } = isUsed;
 }

@@ -22,6 +22,8 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<ProductManufacturer> ProductManufacturers { get; set; }
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<ProductStore> ProductStores { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,7 +51,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Account>()
             .HasIndex(p => p.Email)
             .IsUnique();
-        
+
+        // Product and Manufacturer configs
         modelBuilder.Entity<Product>()
             .HasDiscriminator<string>("ProductType")
             .HasValue<RentableProduct>("Rentable")
@@ -67,5 +70,19 @@ public class AppDbContext : DbContext
             .HasOne(pm => pm.Manufacturer)
             .WithMany(m => m.ProductManufacturers)
             .HasForeignKey(pm => pm.ManufacturerId);
+
+        // Store configs
+        modelBuilder.Entity<ProductStore>()
+            .HasKey(ps => new { ps.ProductId, ps.StoreId });
+
+        modelBuilder.Entity<ProductStore>()
+            .HasOne(ps => ps.Product)
+            .WithMany(p => p.ProductStores)
+            .HasForeignKey(ps => ps.ProductId);
+
+        modelBuilder.Entity<ProductStore>()
+            .HasOne(ps => ps.Store)
+            .WithMany(s => s.ProductStores)
+            .HasForeignKey(ps => ps.StoreId);
     }
 }

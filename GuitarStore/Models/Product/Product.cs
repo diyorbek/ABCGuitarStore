@@ -64,4 +64,5 @@ public abstract class Product
     public HashSet<GuitarEnum>? UsedWith { get; set; }
 
     public virtual ICollection<ProductManufacturer> ProductManufacturers { get; set; }
+    public virtual ICollection<ProductStore> ProductStores { get; set; }
 }
