@@ -15,6 +15,7 @@ public class Store
     [Required] public Address Address { get; set; } // Complex attribute
 
     public virtual ICollection<ProductStore> ProductStores { get; set; }
+    public virtual ICollection<Employee> Employees { get; set; }
 
     public static List<Store> FindByCity(AppDbContext context, string city)
     {

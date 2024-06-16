@@ -84,5 +84,11 @@ public class AppDbContext : DbContext
             .HasOne(ps => ps.Store)
             .WithMany(s => s.ProductStores)
             .HasForeignKey(ps => ps.StoreId);
+
+        // Store employee configs
+        modelBuilder.Entity<Employee>()
+            .HasOne(e => e.Store)
+            .WithMany(s => s.Employees)
+            .HasForeignKey(e => e.StoreId);
     }
 }

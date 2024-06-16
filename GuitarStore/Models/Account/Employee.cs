@@ -1,14 +1,40 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using GuitarStore.Helpers;
+using GuitarStore.Models.Product;
 
 namespace GuitarStore.Models;
 
 public class Employee : Account
 {
     private static int maxCommissionRate;
-    private int commissionRate;
+    private int? commissionRate;
     private string contractNumber;
     private string phoneNumber;
+
+    public Employee(string email, string name, string password, int? commissionRate, string contractNumber,
+        string phoneNumber, EmployeePositionEnum positions, PrivilegeLevel? privilegeLevel, Guid storeId)
+    {
+        if (positions == EmployeePositionEnum.NONE)
+            throw new ArgumentException("Employee must have at least one position.", nameof(positions));
+
+        if (positions.HasFlag(EmployeePositionEnum.ADMIN) &&
+            privilegeLevel == Helpers.PrivilegeLevel.None)
+            throw new ArgumentException("Admin must have at least one privilege level.", nameof(privilegeLevel));
+
+        if (positions.HasFlag(EmployeePositionEnum.ASSOCIATE) && commissionRate == null)
+            throw new ArgumentException("Admin must be assigned to a store.", nameof(storeId));
+
+        Email = email;
+        Name = name;
+        Password = password;
+        CommissionRate = commissionRate;
+        ContractNumber = contractNumber;
+        PhoneNumber = phoneNumber;
+        Positions = positions;
+        PrivilegeLevel = privilegeLevel;
+        StoreId = storeId;
+    }
 
     public static int MaxCommissionRate
     {
@@ -21,9 +47,8 @@ public class Employee : Account
             maxCommissionRate = value;
         }
     }
-
-    [Required]
-    public int CommissionRate
+    
+    public int? CommissionRate
     {
         get => commissionRate;
         set
@@ -62,7 +87,10 @@ public class Employee : Account
         }
     }
 
-    public EmployeePositionEnum Positions { get; set; }
+    [Required] public EmployeePositionEnum Positions { get; set; }
 
-    public PrivilegeLevel PrivilegeLevel { get; set; }
+    public PrivilegeLevel? PrivilegeLevel { get; set; }
+
+    public Guid StoreId { get; set; }
+    [ForeignKey("StoreId")] public virtual Store Store { get; set; }
 }

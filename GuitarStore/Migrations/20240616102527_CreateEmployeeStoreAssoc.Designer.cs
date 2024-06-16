@@ -3,6 +3,7 @@ using System;
 using GuitarStore.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,12 +11,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarStore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616102527_CreateEmployeeStoreAssoc")]
+    partial class CreateEmployeeStoreAssoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
+
+            modelBuilder.Entity("EmployeeStore", b =>
+                {
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EmployeeId", "StoreId");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("EmployeeStores");
+                });
 
             modelBuilder.Entity("GuitarStore.Models.Account", b =>
                 {
@@ -192,11 +210,6 @@ namespace GuitarStore.Migrations
                     b.Property<int>("PrivilegeLevel")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("TEXT");
-
-                    b.HasIndex("StoreId");
-
                     b.HasDiscriminator().HasValue("Employee");
                 });
 
@@ -241,6 +254,25 @@ namespace GuitarStore.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Trusted");
+                });
+
+            modelBuilder.Entity("EmployeeStore", b =>
+                {
+                    b.HasOne("GuitarStore.Models.Employee", "Employee")
+                        .WithMany("EmployeeStores")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GuitarStore.Models.Product.Store", "Store")
+                        .WithMany("EmployeeStores")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.ProductManufacturer", b =>
@@ -312,17 +344,6 @@ namespace GuitarStore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GuitarStore.Models.Employee", b =>
-                {
-                    b.HasOne("GuitarStore.Models.Product.Store", "Store")
-                        .WithMany("Employees")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("GuitarStore.Models.Product.Manufacturer", b =>
                 {
                     b.Navigation("ProductManufacturers");
@@ -337,9 +358,14 @@ namespace GuitarStore.Migrations
 
             modelBuilder.Entity("GuitarStore.Models.Product.Store", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("EmployeeStores");
 
                     b.Navigation("ProductStores");
+                });
+
+            modelBuilder.Entity("GuitarStore.Models.Employee", b =>
+                {
+                    b.Navigation("EmployeeStores");
                 });
 #pragma warning restore 612, 618
         }
