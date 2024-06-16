@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using GuitarStore.Helpers;
 using GuitarStore.Models;
 
 namespace GuitarStore.DTOs;
@@ -16,6 +18,7 @@ public class CustomerDto : AccountDto
             StatusExpiryDate = trustedCustomer.StatusExpiryDate;
     }
 
-    public DateTime Birthdate { get; set; }
+    [Required] [MinimumAge(18)] public DateTime Birthdate { get; set; }
+
     public DateTime StatusExpiryDate { get; set; }
 }

@@ -61,7 +61,7 @@ public class Employee : Account
             phoneNumber = value;
         }
     }
-    
+
     public EmployeePositionEnum Positions { get; set; }
 
     public PrivilegeLevel PrivilegeLevel { get; set; }

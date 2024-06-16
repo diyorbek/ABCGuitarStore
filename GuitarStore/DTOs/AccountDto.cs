@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using GuitarStore.Models;
 
 namespace GuitarStore.DTOs;
@@ -16,8 +17,11 @@ public abstract class AccountDto
         Id = account.Id;
     }
 
+    [Required]
+    [EmailAddress(ErrorMessage = "Invalid email address.")]
     public string Email { get; set; }
-    public string Name { get; set; }
-    public string Password { get; set; }
+
+    [Required] [Length(1, 255)] public string Name { get; set; }
+    [Required] [Length(1, 255)] public string Password { get; set; }
     public int Id { get; set; }
 }

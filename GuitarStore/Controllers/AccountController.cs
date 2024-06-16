@@ -8,19 +8,14 @@ namespace GuitarStore.Controllers;
 [Route("api/account")]
 [ApiController]
 [AllowAnonymous]
-public class AccountController : ControllerBase
+public class AccountController(IAccountService accountService) : ControllerBase
 {
-    private readonly IAccountService _accountService;
-
-    public AccountController(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
-
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
+    public async Task<IActionResult> Register([FromBody] CustomerRegisterRequestDto dto)
     {
-        var result = await _accountService.RegisterAsync(dto);
+        if (!TryValidateModel(dto)) return BadRequest(ModelState);
+
+        var result = await accountService.RegisterAsync(dto);
         if (result != null) return Conflict(result.Message);
         return Ok();
     }
@@ -28,7 +23,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
-        var result = await _accountService.LoginAsync(dto);
+        var result = await accountService.LoginAsync(dto);
 
         if (result is ResponseErrorDto error)
             return error.Status == 500 ? StatusCode(500, error.Message) : Unauthorized(error.Message);
