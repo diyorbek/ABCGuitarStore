@@ -359,9 +359,9 @@ public class SeedData
 
         List<Manufacturer> manufacturers =
         [
-            new Manufacturer{Name="Gibson",Country= "USA"},
-            new Manufacturer{Name="Ibanez",Country= "Japan"},
-            new Manufacturer{Name="Fender",Country= "Germany"},
+            new Manufacturer { Name = "Gibson", Country = "USA", Description = "Placeholder" },
+            new Manufacturer { Name = "Ibanez", Country = "Japan", Description = "Placeholder" },
+            new Manufacturer { Name = "Fender", Country = "Germany", Description = "Placeholder" }
         ];
 
         manufacturers.ForEach(manufacturer =>
