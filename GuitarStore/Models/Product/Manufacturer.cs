@@ -6,6 +6,16 @@ namespace GuitarStore.Models.Product;
 
 public class Manufacturer
 {
+    public Manufacturer()
+    {
+    }
+
+    public Manufacturer(string name, string country)
+    {
+        Name = name;
+        Country = country;
+    }
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }

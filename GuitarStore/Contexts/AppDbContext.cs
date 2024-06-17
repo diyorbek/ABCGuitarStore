@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Account> Accounts { get; set; } // DbSet of the base class
     public DbSet<Product> Products { get; set; }
+    public DbSet<SellableProduct> SellableProduct { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<ProductManufacturer> ProductManufacturers { get; set; }
     public DbSet<Store> Stores { get; set; }
@@ -33,17 +34,9 @@ public class AppDbContext : DbContext
     {
         // Configure Account
         modelBuilder.Entity<Account>().HasKey(a => a.Id);
-
-        // Configure Employee
         modelBuilder.Entity<Employee>().HasBaseType<Account>();
-
-        // Configure Customer (abstract base class)
         modelBuilder.Entity<Customer>().HasBaseType<Account>();
-
-        // Configure RegularCustomer
         modelBuilder.Entity<RegularCustomer>().HasBaseType<Customer>();
-
-        // Configure TrustedCustomer
         modelBuilder.Entity<TrustedCustomer>().HasBaseType<Customer>();
 
         // Discriminator for Customer types
@@ -76,6 +69,8 @@ public class AppDbContext : DbContext
             .HasForeignKey(pm => pm.ManufacturerId);
 
         // Store configs
+        modelBuilder.Entity<Store>().OwnsOne(s => s.Address);
+
         modelBuilder.Entity<ProductStore>()
             .HasKey(ps => new { ps.ProductId, ps.StoreId });
 
@@ -130,19 +125,5 @@ public class AppDbContext : DbContext
             .HasOne(oi => oi.SellableProduct)
             .WithMany(sp => sp.OrderItems)
             .HasForeignKey(oi => oi.SellableProductId);
-
-
-        SeedDb(modelBuilder);
-    }
-
-    private void SeedDb(ModelBuilder modelBuilder)
-    {
-        // modelBuilder.Entity<Product>(p => { p.HasData(sellableProducts); });
-
-        // modelBuilder.Entity<ProductStore>(p =>
-        // {
-        //
-        //     p.HasData(data);
-        // });
     }
 }

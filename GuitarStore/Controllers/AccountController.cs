@@ -1,3 +1,4 @@
+using GuitarStore.Contexts;
 using GuitarStore.DTOs;
 using GuitarStore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace GuitarStore.Controllers;
 [Route("api/account")]
 [ApiController]
 [AllowAnonymous]
-public class AccountController(IAccountService accountService) : ControllerBase
+public class AccountController(IAccountService accountService, AppDbContext context) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CustomerRegisterRequestDto dto)

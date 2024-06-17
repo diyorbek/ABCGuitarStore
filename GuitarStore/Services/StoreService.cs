@@ -37,7 +37,7 @@ public class StoreService : IStoreService
             .Include(s => s.Product)
             .Where(s => s.StoreId == storeId &&
                         (filters.Name == null || s.Product.Name.Contains(filters.Name)) &&
-                        (filters.category == null || s.Product.CategoryEnum == filters.category))
+                        (filters.category == null || s.Product.Category == filters.category))
             .Select(s => (SellableProduct)s.Product)
             .ToListAsync();
     }

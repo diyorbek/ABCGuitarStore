@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GuitarStore.Models.Product;
 
@@ -19,10 +18,10 @@ public enum GuitarEnum
 
 public abstract class Product
 {
-    public Product(CategoryEnum categoryEnum, string name, string description, HashSet<string> images,
-        GuitarEnum? guitarType, HashSet<GuitarEnum>? usedWith)
+    public Product(CategoryEnum category, string name, string description, List<string> images,
+        GuitarEnum? guitarType, List<GuitarEnum>? usedWith)
     {
-        if (categoryEnum == CategoryEnum.GUITAR)
+        if (category == CategoryEnum.GUITAR)
         {
             if (guitarType == null)
                 throw new ArgumentException("Guitar type cannot be null for guitars.", nameof(guitarType));
@@ -30,7 +29,7 @@ public abstract class Product
                 throw new ArgumentException("Used with cannot be empty for guitars.", nameof(usedWith));
         }
 
-        if (categoryEnum == CategoryEnum.ACCESSORY)
+        if (category == CategoryEnum.ACCESSORY)
         {
             if (guitarType != null)
                 throw new ArgumentException("Guitar type must be null for accessories.", nameof(guitarType));
@@ -40,7 +39,7 @@ public abstract class Product
                 throw new ArgumentException("Used with cannot be empty for accessories.", nameof(usedWith));
         }
 
-        CategoryEnum = categoryEnum;
+        Category = category;
         Name = name;
         Description = description;
         Images = images;
@@ -48,20 +47,60 @@ public abstract class Product
         UsedWith = usedWith;
     }
 
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    // Used for seeding
+    public Product()
+    {
+        Id = Guid.NewGuid();
+        Category = CategoryEnum.GUITAR;
+        Name = "";
+        Description = "";
+        GuitarType = GuitarEnum.OTHER;
+    }
 
-    [Required] public CategoryEnum CategoryEnum { get; set; }
+
+    [Key] public Guid Id { get; set; } = Guid.NewGuid();
+
+    [Required] public CategoryEnum Category { get; set; }
 
     [Required] [Length(1, 255)] public string Name { get; set; }
 
     [Required] [Length(1, 1000)] public string Description { get; set; }
 
-    [Required] [Length(1, 10)] public HashSet<string> Images { get; set; }
+    [Required]
+    [Length(1, 10)]
+    public List<string> Images { get; set; }
 
-    public GuitarEnum? GuitarType { get; set; }
-    public HashSet<GuitarEnum>? UsedWith { get; set; }
+    public GuitarEnum? GuitarType
+    {
+        get
+        {
+            if (Category == CategoryEnum.ACCESSORY)
+                throw new ArgumentException("Guitar type cannot exist for accessories.", nameof(GuitarType));
+            return GuitarType;
+        }
+        set
+        {
+            if (Category == CategoryEnum.ACCESSORY)
+                throw new ArgumentException("Guitar type cannot be set for accessories.", nameof(GuitarType));
+            GuitarType = value;
+        }
+    }
+
+    public List<GuitarEnum>? UsedWith
+    {
+        get
+        {
+            if (Category == CategoryEnum.GUITAR)
+                throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
+            return UsedWith;
+        }
+        set
+        {
+            if (Category == CategoryEnum.GUITAR)
+                throw new ArgumentException("Used_with cannot be set for guitars.", nameof(UsedWith));
+            if (value != null) UsedWith = value;
+        }
+    }
 
     public virtual ICollection<ProductManufacturer> ProductManufacturers { get; set; }
     public virtual ICollection<ProductStore> ProductStores { get; set; }
