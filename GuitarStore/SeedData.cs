@@ -5,8 +5,13 @@ namespace GuitarStore;
 
 public class SeedData
 {
+    private static bool Ran;
+
     public static void SeedStores(AppDbContext context)
     {
+        if (Ran) return;
+        Ran = true;
+
         List<Store> stores =
         [
             new Store
@@ -354,9 +359,9 @@ public class SeedData
 
         List<Manufacturer> manufacturers =
         [
-            new Manufacturer("Gibson", "USA"),
-            new Manufacturer("Ibanez", "Japan"),
-            new Manufacturer("Fender", "Germany")
+            new Manufacturer{Name="Gibson",Country= "USA"},
+            new Manufacturer{Name="Ibanez",Country= "Japan"},
+            new Manufacturer{Name="Fender",Country= "Germany"},
         ];
 
         manufacturers.ForEach(manufacturer =>

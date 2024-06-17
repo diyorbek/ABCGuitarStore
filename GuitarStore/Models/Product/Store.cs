@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using GuitarStore.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,10 @@ public class Store
     [Required] public Address Address { get; set; } // Complex attribute
     [Required] public string Image { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<ProductStore> ProductStores { get; set; }
+    [JsonIgnore]
+
     public virtual ICollection<Employee> Employees { get; set; }
 
     public static List<Store> FindByCity(AppDbContext context, string city)

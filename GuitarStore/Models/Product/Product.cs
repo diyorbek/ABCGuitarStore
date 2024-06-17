@@ -18,6 +18,10 @@ public enum GuitarEnum
 
 public abstract class Product
 {
+    private readonly GuitarEnum? _guitarType;
+    private readonly List<GuitarEnum>? _usedWith;
+    private readonly CategoryEnum _category;
+
     public Product(CategoryEnum category, string name, string description, List<string> images,
         GuitarEnum? guitarType, List<GuitarEnum>? usedWith)
     {
@@ -58,17 +62,20 @@ public abstract class Product
     }
 
 
-    [Key] public Guid Id { get; set; } = Guid.NewGuid();
-
-    [Required] public CategoryEnum Category { get; set; }
-
-    [Required] [Length(1, 255)] public string Name { get; set; }
-
-    [Required] [Length(1, 1000)] public string Description { get; set; }
+    [Key] public Guid Id { get; init; } = Guid.NewGuid();
 
     [Required]
-    [Length(1, 10)]
-    public List<string> Images { get; set; }
+    public CategoryEnum Category
+    {
+        get => _category;
+        init => _category = value;
+    }
+
+    [Required] [Length(1, 255)] public string Name { get; init; }
+
+    [Required] [Length(1, 1000)] public string Description { get; init; }
+
+    [Required] [Length(1, 10)] public List<string> Images { get; init; }
 
     public GuitarEnum? GuitarType
     {
@@ -76,13 +83,13 @@ public abstract class Product
         {
             if (Category == CategoryEnum.ACCESSORY)
                 throw new ArgumentException("Guitar type cannot exist for accessories.", nameof(GuitarType));
-            return GuitarType;
+            return _guitarType;
         }
-        set
+        init
         {
             if (Category == CategoryEnum.ACCESSORY)
                 throw new ArgumentException("Guitar type cannot be set for accessories.", nameof(GuitarType));
-            GuitarType = value;
+            _guitarType = value;
         }
     }
 
@@ -92,13 +99,13 @@ public abstract class Product
         {
             if (Category == CategoryEnum.GUITAR)
                 throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
-            return UsedWith;
+            return _usedWith;
         }
-        set
+        init
         {
             if (Category == CategoryEnum.GUITAR)
                 throw new ArgumentException("Used_with cannot be set for guitars.", nameof(UsedWith));
-            if (value != null) UsedWith = value;
+            if (value != null) _usedWith = value;
         }
     }
 
