@@ -8,5 +8,5 @@ public interface IStoreService
     Task<List<Store>> GetStoresAsync(StoreFilterDto filter);
     Task<Store?> GetStoreAsync(Guid storeId);
     Task<List<SellableProduct>> GetStoreSellableProductsAsync(Guid storeId, ProductFiltersDto filters);
-    Task<SellableProduct?> GetSellableProductAsync(Guid productId);
+    Task<SellableProductDetailsDto?> GetSellableProductDetailsAsync(Guid productId);
 }

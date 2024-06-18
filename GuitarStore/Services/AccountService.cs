@@ -10,20 +10,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace GuitarStore.Services;
 
-public class AccountService : IAccountService
+public class AccountService(IConfiguration configuration, AppDbContext context) : IAccountService
 {
-    private readonly IConfiguration _configuration;
-    private readonly AppDbContext _context;
-
-    public AccountService(IConfiguration configuration, AppDbContext context)
-    {
-        _configuration = configuration;
-        _context = context;
-    }
-
     public async Task<LoginDto> LoginAsync(LoginRequestDto request)
     {
-        var account = await _context.Accounts
+        var account = await context.Accounts
             .FirstOrDefaultAsync(a => a.Email == request.Email);
 
         if (account == null || !BCrypt.Net.BCrypt.Verify(request.Password, account.Password))
@@ -36,7 +27,7 @@ public class AccountService : IAccountService
 
     public async Task<ResponseErrorDto?> RegisterAsync(CustomerRegisterRequestDto request)
     {
-        if (await _context.Accounts.AnyAsync(a => a.Email == request.Email))
+        if (await context.Accounts.AnyAsync(a => a.Email == request.Email))
             return new ResponseErrorDto { Message = "Email already in use." };
 
         var account = new RegularCustomer
@@ -47,8 +38,8 @@ public class AccountService : IAccountService
             Birthdate = request.Birthdate
         };
 
-        _context.Accounts.Add(account);
-        await _context.SaveChangesAsync();
+        context.Accounts.Add(account);
+        await context.SaveChangesAsync();
 
         return null;
     }
@@ -62,14 +53,14 @@ public class AccountService : IAccountService
             new Claim(ClaimTypes.Name, account.Name)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
+            configuration["Jwt:Issuer"],
+            configuration["Jwt:Audience"],
             claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:DurationInMinutes"])),
+            expires: DateTime.Now.AddMinutes(Convert.ToDouble(configuration["Jwt:DurationInMinutes"])),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using GuitarStore.Contexts;
 using GuitarStore.Interfaces;
 using GuitarStore.Services;
@@ -18,8 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

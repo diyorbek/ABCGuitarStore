@@ -20,7 +20,6 @@ public abstract class Product
 {
     private readonly GuitarEnum? _guitarType;
     private readonly List<GuitarEnum>? _usedWith;
-    private readonly CategoryEnum _category;
 
     public Product(CategoryEnum category, string name, string description, List<string> images,
         GuitarEnum? guitarType, List<GuitarEnum>? usedWith)
@@ -64,12 +63,7 @@ public abstract class Product
 
     [Key] public Guid Id { get; init; } = Guid.NewGuid();
 
-    [Required]
-    public CategoryEnum Category
-    {
-        get => _category;
-        init => _category = value;
-    }
+    [Required] public CategoryEnum Category { get; init; }
 
     [Required] [Length(1, 255)] public string Name { get; init; }
 
@@ -82,7 +76,8 @@ public abstract class Product
         get
         {
             if (Category == CategoryEnum.ACCESSORY)
-                throw new ArgumentException("Guitar type cannot exist for accessories.", nameof(GuitarType));
+                return null;
+            // throw new ArgumentException("Guitar type cannot exist for accessories.", nameof(GuitarType));
             return _guitarType;
         }
         init
@@ -98,7 +93,8 @@ public abstract class Product
         get
         {
             if (Category == CategoryEnum.GUITAR)
-                throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
+                return null;
+            // throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
             return _usedWith;
         }
         init
