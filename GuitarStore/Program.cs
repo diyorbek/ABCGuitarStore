@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(o =>

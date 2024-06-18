@@ -17,4 +17,14 @@ public class ProductController(IStoreService storeService) : ControllerBase
         if (result == null) return NotFound();
         return Ok(result);
     }
+
+    [HttpGet]
+    [Authorize]
+    [Route("{productId:guid}/available-stores", Name = "GetAvailableStores")]
+    public async Task<IActionResult> GetAvailableStores(Guid productId)
+    {
+        var result = await storeService.GetSellableProductAvailableStoresAsync(productId);
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
 }

@@ -38,3 +38,25 @@ public class SellableProductDetailsDto(SellableProduct product)
         .Select(pm => new ProductManufacturerDto(pm.Manufacturer))
         .ToList();
 }
+
+public class SellableProductQuantityDto
+{
+    public int Quantity { get; set; }
+}
+
+public class CreateOrderRequestDto
+{
+    public IList<OrderProductDto> products;
+}
+
+public class OrderProductDto
+{
+    public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
+}
+
+public class CreateOrderErrorResponse
+{
+    public string Message { get; set; }
+    public int Status { get; set; }
+}

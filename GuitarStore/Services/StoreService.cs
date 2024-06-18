@@ -22,7 +22,7 @@ public class StoreService(AppDbContext context) : IStoreService
     }
 
 
-    public async Task<List<SellableProduct>> GetStoreSellableProductsAsync(Guid storeId, ProductFiltersDto filters)
+    public async Task<List<SellableProduct>?> GetStoreSellableProductsAsync(Guid storeId, ProductFiltersDto filters)
     {
         return await context.ProductStores
             .Include(s => s.Product)
@@ -40,5 +40,24 @@ public class StoreService(AppDbContext context) : IStoreService
             .Where(p => p.Id == productId)
             .Select(p => new SellableProductDetailsDto((SellableProduct)p))
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<SellableProductQuantityDto?> GetSellableProductQuantityAsync(Guid storeId, Guid productId)
+    {
+        return await context.ProductStores
+            .Include(s => s.Product)
+            .Where(s => s.StoreId == storeId && s.ProductId == productId)
+            .Select(s => new SellableProductQuantityDto { Quantity = s.Quantity })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<Store>?> GetSellableProductAvailableStoresAsync(Guid productId)
+    {
+        var product = await context.Products
+            .Include(p => p.ProductStores)
+            .ThenInclude(ps => ps.Store)
+            .Where(p => p.Id == productId).FirstOrDefaultAsync();
+
+        return product?.findAvailableStores();
     }
 }

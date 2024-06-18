@@ -107,4 +107,9 @@ public abstract class Product
 
     public virtual ICollection<ProductManufacturer> ProductManufacturers { get; set; }
     public virtual ICollection<ProductStore> ProductStores { get; set; }
+
+    public List<Store> findAvailableStores()
+    {
+        return ProductStores.SkipWhile(ps => ps.Quantity == 0).Select(ps => ps.Store).ToList();
+    }
 }
