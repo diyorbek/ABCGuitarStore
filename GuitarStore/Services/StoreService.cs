@@ -60,4 +60,22 @@ public class StoreService(AppDbContext context) : IStoreService
 
         return product?.findAvailableStores();
     }
+
+    public async Task<CreateOrderErrorResponse?> ValidateOrderQuantity(Guid storeId, CreateOrderRequestDto dto)
+    {
+        foreach (var orderProductDto in dto.products)
+        {
+            var availableQuantityDto =
+                await GetSellableProductQuantityAsync(storeId, orderProductDto.ProductId);
+
+            if (availableQuantityDto == null)
+                return new CreateOrderErrorResponse { Status = 404, Message = "Product unavailable" };
+            if (availableQuantityDto.Quantity < orderProductDto.Quantity)
+                return new CreateOrderErrorResponse { Status = 400, Message = "Please reduce quantity" };
+            if (orderProductDto.Quantity == 0)
+                return new CreateOrderErrorResponse { Status = 400, Message = "Incorrect quantity" };
+        }
+
+        return null;
+    }
 }

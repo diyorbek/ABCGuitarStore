@@ -45,10 +45,13 @@ public class StoreController(IStoreService storeService, IOrderService orderServ
     [Route("{storeId:Guid}/order", Name = "CreateOrder")]
     public async Task<IActionResult> CreateOrder(Guid storeId, [FromBody] CreateOrderRequestDto dto)
     {
-        var customerEmail = User.Claims.Single(c => c.Type == ClaimTypes.Email).Value;
-        var result = await orderService.CreateOrder(customerEmail, storeId, dto);
+        var customerId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+        var validation = await storeService.ValidateOrderQuantity(storeId, dto);
+        if (validation != null) return BadRequest(validation);
 
+        var result = await orderService.CreateOrder(customerId, storeId, dto);
         if (result != null) return BadRequest(result);
+
         return Created();
     }
 }

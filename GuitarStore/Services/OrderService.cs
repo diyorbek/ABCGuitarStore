@@ -7,22 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GuitarStore.Services;
 
-public class OrderService(AppDbContext context, StoreService storeService) : IOrderService
+public class OrderService(AppDbContext context) : IOrderService
 {
-    public async Task<CreateOrderErrorResponse?> CreateOrder(string customerEmail, Guid storeId,
+    public async Task<CreateOrderErrorResponse?> CreateOrder(string customerId, Guid storeId,
         CreateOrderRequestDto dto)
     {
-        var validation = await ValidateOrderQuantity(storeId, dto);
-        if (validation != null) return validation;
-
-        var customer = await context.Accounts
-            .Where(c => c.Email == customerEmail)
-            .Select(c => (Customer)c)
-            .FirstOrDefaultAsync();
+        var customer = (Customer?)await context.Accounts.FindAsync(new Guid(customerId));
+        var store = await context.Stores.FindAsync(storeId);
 
         if (customer == null) return new CreateOrderErrorResponse { Status = 400, Message = "User doesn't exist" };
 
-        context.Orders.Add(new Order
+        var order = new Order
         {
             Customer = customer,
             OrderItems = dto.products.Select(p => new OrderItem
@@ -30,21 +25,26 @@ public class OrderService(AppDbContext context, StoreService storeService) : IOr
                 SellableProductId = p.ProductId,
                 Quantity = p.Quantity
             }).ToList()
-        });
+        };
 
-        return null;
-    }
+        await context.Orders.AddAsync(order);
+        var storeProducts = context.ProductStores
+            .Include(ps => ps.Store)
+            .Include(ps => ps.Product)
+            .Where(ps => store != null && ps.StoreId == store.Id).ToList();
 
-    private async Task<CreateOrderErrorResponse?> ValidateOrderQuantity(Guid storeId, CreateOrderRequestDto dto)
-    {
-        foreach (var orderProductDto in dto.products)
+        foreach (var orderOrderItem in order.OrderItems)
         {
-            var availableQuantityDto =
-                await storeService.GetSellableProductQuantityAsync(storeId, orderProductDto.ProductId);
+            var sellableProductAssoc =
+                storeProducts.FirstOrDefault(sp => sp.ProductId == orderOrderItem.SellableProductId);
 
-            if (availableQuantityDto == null || availableQuantityDto.Quantity < orderProductDto.Quantity)
-                return new CreateOrderErrorResponse { Status = 400, Message = "Please reduce quantity" };
+            if (sellableProductAssoc == null) continue;
+            
+            sellableProductAssoc.Quantity -= orderOrderItem.Quantity;
+            context.ProductStores.Update(sellableProductAssoc);
         }
+
+        await context.SaveChangesAsync();
 
         return null;
     }

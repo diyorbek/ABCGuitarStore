@@ -48,9 +48,10 @@ public class AccountService(IConfiguration configuration, AppDbContext context) 
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, account.Email),
+            new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, account.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, account.Name)
+            new Claim(JwtRegisteredClaimNames.Name, account.Name)
         };
 
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!));

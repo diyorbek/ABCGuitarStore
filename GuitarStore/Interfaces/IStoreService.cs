@@ -11,4 +11,5 @@ public interface IStoreService
     Task<SellableProductDetailsDto?> GetSellableProductDetailsAsync(Guid productId);
     Task<SellableProductQuantityDto?> GetSellableProductQuantityAsync(Guid storeId, Guid productId);
     Task<List<Store>?> GetSellableProductAvailableStoresAsync(Guid productId);
+    Task<CreateOrderErrorResponse?> ValidateOrderQuantity(Guid storeId, CreateOrderRequestDto dto);
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using GuitarStore.Models.Product;
 
 namespace GuitarStore.DTOs;
@@ -46,12 +47,14 @@ public class SellableProductQuantityDto
 
 public class CreateOrderRequestDto
 {
-    public IList<OrderProductDto> products;
+    public IList<OrderProductDto> products { get; set; }
 }
 
 public class OrderProductDto
 {
     public Guid ProductId { get; set; }
+
+    [Range(1, 5, ErrorMessage = "Incorrect quantity")]
     public int Quantity { get; set; }
 }
 
