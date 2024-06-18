@@ -113,8 +113,7 @@ public class AppDbContext : DbContext
         // Order config
         modelBuilder.Entity<Customer>()
             .HasMany(c => c.Orders)
-            .WithMany(o => o.Customers)
-            .UsingEntity(j => j.ToTable("CustomerOrder"));
+            .WithOne(o => o.Customer);
 
         modelBuilder.Entity<Order>()
             .HasMany(o => o.OrderItems)

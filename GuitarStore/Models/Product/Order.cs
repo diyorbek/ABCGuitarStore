@@ -20,7 +20,7 @@ public class Order
     [Required] public DateTime OrderDate { get; set; } = DateTime.Now;
     [Required] public OrderStatus OrderStatus { get; set; } = OrderStatus.PENDING;
 
-    public virtual ICollection<Customer> Customers { get; set; }
+    public virtual Customer Customer { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; }
 
     public float getRetailPrice()
