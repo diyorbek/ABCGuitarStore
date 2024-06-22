@@ -8,9 +8,12 @@ namespace GuitarStore.Models;
 public class Employee : Account
 {
     private static int _maxCommissionRate;
-    private int? _commissionRate;
-    private string _contractNumber;
+    private readonly int? _commissionRate;
+    private readonly string _contractNumber;
     private string _phoneNumber;
+    private readonly Guid _storeId;
+    private PrivilegeLevel? _privilegeLevel;
+    private readonly EmployeePositionEnum _positions;
 
     public Employee(string email, string name, string password, int? commissionRate, string contractNumber,
         string phoneNumber, EmployeePositionEnum positions, PrivilegeLevel? privilegeLevel, Guid storeId)
@@ -51,7 +54,7 @@ public class Employee : Account
     public int? CommissionRate
     {
         get => _commissionRate;
-        set
+        init
         {
             if (value < 0 || value > MaxCommissionRate)
                 throw new ArgumentOutOfRangeException(nameof(value),
@@ -65,7 +68,7 @@ public class Employee : Account
     public string ContractNumber
     {
         get => _contractNumber;
-        set
+        init
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Contract number cannot be null or empty.", nameof(value));
@@ -87,10 +90,24 @@ public class Employee : Account
         }
     }
 
-    [Required] public EmployeePositionEnum Positions { get; set; }
+    [Required]
+    public EmployeePositionEnum Positions
+    {
+        get => _positions;
+        init => _positions = value;
+    }
 
-    public PrivilegeLevel? PrivilegeLevel { get; set; }
+    public PrivilegeLevel? PrivilegeLevel
+    {
+        get => _privilegeLevel;
+        set => _privilegeLevel = value;
+    }
 
-    public Guid StoreId { get; set; }
+    public Guid StoreId
+    {
+        get => _storeId;
+        init => _storeId = value;
+    }
+
     [ForeignKey("StoreId")] public virtual Store Store { get; set; }
 }

@@ -2,12 +2,14 @@ using System.Security.Claims;
 using GuitarStore.DTOs;
 using GuitarStore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitarStore.Controllers;
 
 [Route("api/store")]
 [ApiController]
+[EnableCors("AllowAnyOrigin")]
 public class StoreController(IStoreService storeService, IOrderService orderService) : ControllerBase
 {
     [HttpGet]

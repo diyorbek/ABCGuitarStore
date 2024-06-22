@@ -8,7 +8,7 @@ public class Manufacturer
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] [Length(1, 255)] public string Country { get; set; }

@@ -19,7 +19,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddCors(options =>  
+{  
+    options.AddPolicy("AllowAnyOrigin", b =>  
+    {  
+        b.AllowAnyOrigin()  
+            .AllowAnyMethod()  
+            .AllowAnyHeader();  
+    });  
+});  
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
@@ -76,7 +84,7 @@ app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
+app.UseCors("AllowAnyOrigin");  
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();

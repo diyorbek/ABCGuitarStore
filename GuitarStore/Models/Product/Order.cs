@@ -15,13 +15,13 @@ public class Order
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid OrderId { get; set; }
+    public Guid OrderId { get; init; }
 
-    [Required] public DateTime OrderDate { get; set; } = DateTime.Now;
+    [Required] public DateTime OrderDate { get; init; } = DateTime.Now;
     [Required] public OrderStatus OrderStatus { get; set; } = OrderStatus.PENDING;
 
-    public virtual Customer Customer { get; set; }
-    public virtual ICollection<OrderItem> OrderItems { get; set; }
+    public virtual Customer Customer { get; init; }
+    public virtual ICollection<OrderItem> OrderItems { get; init; }
 
     public float getRetailPrice()
     {

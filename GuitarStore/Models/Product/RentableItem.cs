@@ -7,7 +7,7 @@ public class RentableItem
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required] [Length(1, 255)] public string ItemCode { get; set; }
 

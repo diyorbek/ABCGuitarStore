@@ -10,14 +10,14 @@ public class Store
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] public Address Address { get; set; } // Complex attribute
     [Required] public string Image { get; set; }
 
-    [JsonIgnore] public virtual ICollection<ProductStore> ProductStores { get; set; }
-    [JsonIgnore] public virtual ICollection<Employee> Employees { get; set; }
+    [JsonIgnore] public virtual ICollection<ProductStore> ProductStores { get; init; }
+    [JsonIgnore] public virtual ICollection<Employee> Employees { get; init; }
 
     public static List<Store> FindByCity(AppDbContext context, string city)
     {
@@ -32,7 +32,7 @@ public class Store
 [Owned]
 public class Address
 {
-    [Required] [Length(1, 255)] public string Street { get; set; }
-    [Required] [Length(1, 255)] public string City { get; set; }
-    [Required] [Length(1, 255)] public string PostalCode { get; set; }
+    [Required] [Length(1, 255)] public string Street { get; init; }
+    [Required] [Length(1, 255)] public string City { get; init; }
+    [Required] [Length(1, 255)] public string PostalCode { get; init; }
 }

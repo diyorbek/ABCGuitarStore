@@ -34,7 +34,7 @@ public class Rent
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required] public RentStatus RentStatus { get; set; }
     [Required] public DateTime StartDate { get; set; }

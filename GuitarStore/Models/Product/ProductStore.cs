@@ -5,7 +5,7 @@ namespace GuitarStore.Models.Product;
 
 public class ProductStore
 {
-    [Key] public Guid ProductId { get; set; }
+    [Key] public Guid ProductId { get; init; }
     [Key] public Guid StoreId { get; set; }
 
     [Range(0, 100)] public int Quantity { get; set; }
