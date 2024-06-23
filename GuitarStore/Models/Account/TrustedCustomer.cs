@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using GuitarStore.Models.Product;
+using GuitarStore.Services;
 
 namespace GuitarStore.Models;
 
 public class TrustedCustomer : Customer
 {
-    private static float _depositAmount;
-    private static int _maxActiveRent;
+    // static member control
+    private static StaticFieldsService _staticFieldsService;
 
     private DateTime _statusExpiryDate;
 
@@ -22,26 +23,14 @@ public class TrustedCustomer : Customer
 
     public static float DepositAmount
     {
-        get => _depositAmount;
-        set
-        {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value),
-                    "Deposit amount must be greater than or equal to 0.");
-            _depositAmount = value;
-        }
+        get => _staticFieldsService.ClassAttributes.DepositAmount;
+        set => _staticFieldsService.ClassAttributes.DepositAmount = value;
     }
 
     public static int MaxActiveRent
     {
-        get => _maxActiveRent;
-        set
-        {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value),
-                    "Max active rent must be greater than or equal to 0.");
-            _maxActiveRent = value;
-        }
+        get => _staticFieldsService.ClassAttributes.MaxActiveRents;
+        set => _staticFieldsService.ClassAttributes.MaxActiveRents = value;
     }
 
     [Required]
@@ -67,5 +56,10 @@ public class TrustedCustomer : Customer
     public HashSet<Rent> GetOverdueRents()
     {
         return Rents.Where(rent => rent.RentStatus == RentStatus.OVERDUE).ToHashSet();
+    }
+
+    public static void InitializeStaticMembersService(StaticFieldsService svc)
+    {
+        _staticFieldsService = svc;
     }
 }

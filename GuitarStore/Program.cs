@@ -16,9 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.EnableSensitiveDataLogging();
 });
+builder.Services.AddScoped<StaticFieldsService, StaticFieldsService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStoreService, StoreService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {

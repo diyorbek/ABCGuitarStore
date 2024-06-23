@@ -1,9 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using GuitarStore.Services;
 
 namespace GuitarStore.Models.Product;
 
 public class RentableProduct : Product
 {
+    // static member control
+    private static StaticFieldsService _staticFieldsService;
+
     public RentableProduct()
     {
     }
@@ -32,5 +36,14 @@ public class RentableProduct : Product
 
     public virtual ICollection<RentableItem> RentableItems { get; }
 
-    public static int MaxRentDays { get; set; }
+    public static int MaxRentDays
+    {
+        get => _staticFieldsService.ClassAttributes.MaxRentDays;
+        set => _staticFieldsService.ClassAttributes.MaxRentDays = value;
+    }
+
+    public static void InitializeStaticMembersService(StaticFieldsService svc)
+    {
+        _staticFieldsService = svc;
+    }
 }

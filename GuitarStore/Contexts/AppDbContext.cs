@@ -18,7 +18,9 @@ public class AppDbContext : DbContext
         _connectionString = configuration.GetConnectionString("DefaultConnection")!;
     }
 
-    public DbSet<Account> Accounts { get; set; } // DbSet of the base class
+    public DbSet<ClassAttributes?> ClassAttributes { get; set; }
+
+    public DbSet<Account> Accounts { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<SellableProduct> SellableProduct { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
@@ -32,6 +34,9 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Config static members
+        modelBuilder.Entity<ClassAttributes>().HasData(new ClassAttributes { Id = Guid.NewGuid() });
+
         // Configure Account
         modelBuilder.Entity<Account>().HasKey(a => a.Id);
         modelBuilder.Entity<Employee>().HasBaseType<Account>();
