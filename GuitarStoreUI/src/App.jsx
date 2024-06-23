@@ -3,20 +3,19 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
-  CardMedia,
   Container,
   IconButton,
-  TextField,
   Toolbar,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { Home } from "./Home";
+} from '@mui/material';
+import { Link, Route, Switch } from 'react-router-dom';
+import { Home } from './Home';
+import { ProductDetails } from './ProductDetails';
+import { Products } from './Products';
+import { useAuth } from './api';
 
 function App() {
-  const [count, setCount] = useState(0);
+  useAuth();
 
   return (
     <>
@@ -26,15 +25,15 @@ function App() {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              component={Link}
+              to="/"
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
+                display: 'flex',
+                fontFamily: 'monospace',
                 fontWeight: 700,
-                color: "inherit",
-                textDecoration: "none",
+                color: 'inherit',
+                textDecoration: 'none',
               }}
             >
               ABS Guitar Stores
@@ -44,15 +43,15 @@ function App() {
               sx={{
                 flex: 1,
                 gap: 2,
-                display: "flex",
-                flexDirection: "row-reverse",
+                display: 'flex',
+                flexDirection: 'row-reverse',
               }}
             >
               <IconButton sx={{ p: 0 }}>
                 <Avatar alt="User" />
               </IconButton>
               <Button variant="contained">Orders</Button>
-              <Button variant="contained" href="/">
+              <Button variant="contained" to="/" component={Link}>
                 Home
               </Button>
             </Box>
@@ -60,9 +59,21 @@ function App() {
         </Container>
       </AppBar>
 
-      <Container maxWidth="sm">
-        <Home />
-      </Container>
+      <Switch>
+        <Route path="/:storeId/:productId" exact>
+          <ProductDetails />
+        </Route>
+
+        <Route path="/:storeId" exact>
+          <Products />
+        </Route>
+
+        <Route path="/" exact>
+          <Container maxWidth="sm">
+            <Home />
+          </Container>
+        </Route>
+      </Switch>
     </>
   );
 }

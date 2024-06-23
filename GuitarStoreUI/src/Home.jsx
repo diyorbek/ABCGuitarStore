@@ -1,75 +1,50 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  IconButton,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useFetch } from "./useFetch";
+import { Box, Button, TextField } from '@mui/material';
+import { useState } from 'react';
+import { StoreList } from './StoreList';
+import { Breadcrumb } from './Breadcrumb';
 
 export function Home() {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const { data, loading } = useFetch(`/store`);
-  console.log(data);
+  const [name, setName] = useState('');
+  const [city, setCity] = useState('');
+  const [query, setQuery] = useState({ name, city });
+
   return (
     <>
+      <Box margin="auto" paddingTop={2}>
+        <Breadcrumb />
+      </Box>
+
       <Box py={4} display="flex" flexDirection="column">
         <Box
+          width="100%"
+          component="form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setQuery({ name, city });
+          }}
           alignSelf="center"
           display="flex"
-          justifyContent="space-between"
-          gap={4}
+          gap={2}
         >
           <TextField
             label="Store Name"
             value={name}
+            size="small"
             onChange={({ target }) => setName(target.value)}
           />
           <TextField
             label="City"
             value={city}
+            size="small"
             onChange={({ target }) => setCity(target.value)}
           />
-          <Button variant="contained">Search</Button>
+          <Button type="submit" variant="contained">
+            Search
+          </Button>
         </Box>
       </Box>
 
-      <Box display="flex" flexDirection="column" gap={4}>
-        <Card sx={{ height: 180, display: "flex" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 200, height: 200, objectFit: "cover" }}
-            image="https://media.gettyimages.com/id/78057641/photo/guitars-in-music-store.jpg?s=612x612&w=0&k=20&c=kPQaoZ5d9Wown6J_vLQjlKiaJLEbdDJeYRnqkeqUI0Y="
-            alt="Live from space album cover"
-          />
-          <CardContent sx={{ flex: 1 }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h5">
-                Live From Space
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="text.secondary"
-                component="div"
-              >
-                Mac Miller
-              </Typography>
-              <Button sx={{ mt: 4 }} variant="outlined">
-                View products
-              </Button>
-            </CardContent>
-          </CardContent>
-        </Card>
-      </Box>
+      <StoreList {...query} />
     </>
   );
 }
