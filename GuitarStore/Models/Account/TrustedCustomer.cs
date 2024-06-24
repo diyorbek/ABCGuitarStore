@@ -6,31 +6,22 @@ namespace GuitarStore.Models;
 
 public class TrustedCustomer : Customer
 {
-    // static member control
+    // Static member control
     private static StaticFieldsService _staticFieldsService;
 
+    // Backing fields
     private DateTime _statusExpiryDate;
 
+    // Default constructor
     public TrustedCustomer()
     {
     }
 
+    // Copy constructor for dynamic inheritance
     public TrustedCustomer(RegularCustomer customer)
     {
         Birthdate = customer.Birthdate;
         StatusExpiryDate = DateTime.Now.AddYears(1);
-    }
-
-    public static float DepositAmount
-    {
-        get => _staticFieldsService.ClassAttributes.DepositAmount;
-        set => _staticFieldsService.ClassAttributes.DepositAmount = value;
-    }
-
-    public static int MaxActiveRent
-    {
-        get => _staticFieldsService.ClassAttributes.MaxActiveRents;
-        set => _staticFieldsService.ClassAttributes.MaxActiveRents = value;
     }
 
     [Required]
@@ -46,16 +37,31 @@ public class TrustedCustomer : Customer
         }
     }
 
-    public virtual ICollection<Rent> Rents { get; set; }
+    // Relational collection
+    public virtual ICollection<Rent> Rents { get; init; }
 
-    public HashSet<Rent> GetActiveRents()
+    // Static members
+    public static float DepositAmount
     {
-        return Rents.Where(rent => rent.RentStatus == RentStatus.ACTIVE).ToHashSet();
+        get => _staticFieldsService.ClassAttributes.DepositAmount;
+        set => _staticFieldsService.ClassAttributes.DepositAmount = value;
     }
 
-    public HashSet<Rent> GetOverdueRents()
+    public static int MaxActiveRent
     {
-        return Rents.Where(rent => rent.RentStatus == RentStatus.OVERDUE).ToHashSet();
+        get => _staticFieldsService.ClassAttributes.MaxActiveRents;
+        set => _staticFieldsService.ClassAttributes.MaxActiveRents = value;
+    }
+
+    // Methods
+    public List<Rent> GetActiveRents()
+    {
+        return Rents.Where(rent => rent.RentStatus == RentStatus.ACTIVE).ToList();
+    }
+
+    public List<Rent> GetOverdueRents()
+    {
+        return Rents.Where(rent => rent.RentStatus == RentStatus.OVERDUE).ToList();
     }
 
     public static void InitializeStaticMembersService(StaticFieldsService svc)

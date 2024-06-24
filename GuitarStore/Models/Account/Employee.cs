@@ -11,6 +11,7 @@ public class Employee : Account
     // static member control
     private static StaticFieldsService _staticFieldsService;
 
+    // Backing fields
     private readonly int? _commissionRate;
     private readonly string _contractNumber;
     private string _phoneNumber;
@@ -70,7 +71,6 @@ public class Employee : Account
         }
     }
 
-
     [Required]
     [Phone]
     public string PhoneNumber
@@ -84,14 +84,14 @@ public class Employee : Account
         }
     }
 
-    [Required] public EmployeePositionEnum Positions { get; init; }
-
+    [Required] public EmployeePositionEnum Positions { get; set; }
     public PrivilegeLevel? PrivilegeLevel { get; set; }
 
+    // Relational members
     public Guid StoreId { get; init; }
+    [ForeignKey("StoreId")] public virtual Store Store { get; init; }
 
-    [ForeignKey("StoreId")] public virtual Store Store { get; set; }
-
+    // Methods
     public static void InitializeStaticMembersService(StaticFieldsService svc)
     {
         _staticFieldsService = svc;

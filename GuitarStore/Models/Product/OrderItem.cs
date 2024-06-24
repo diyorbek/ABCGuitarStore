@@ -11,8 +11,9 @@ public class OrderItem
 
     [Required] public int Quantity { get; set; }
 
-    [Required] public Guid OrderId { get; set; }
-    [Required] public Guid SellableProductId { get; set; }
-    [ForeignKey("OrderId")] public Order Order { get; set; }
-    [ForeignKey("SellableProductId")] public SellableProduct SellableProduct { get; set; }
+    // Relational memebers
+    [Required] public Guid OrderId { get; init; }
+    [Required] public Guid SellableProductId { get; init; }
+    [ForeignKey("OrderId")] public Order Order { get; init; }
+    [ForeignKey("SellableProductId")] public SellableProduct SellableProduct { get; init; }
 }

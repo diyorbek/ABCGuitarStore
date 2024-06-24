@@ -14,6 +14,7 @@ public enum RentStatus
 
 public class Rent
 {
+    // Backing fields
     private DateTime? _actualEndDate;
     private DateTime _scheduledEndDate;
 
@@ -37,7 +38,7 @@ public class Rent
     public Guid Id { get; init; }
 
     [Required] public RentStatus RentStatus { get; set; }
-    [Required] public DateTime StartDate { get; set; }
+    [Required] public DateTime StartDate { get; init; }
 
     [Required]
     public DateTime ScheduledEndDate
@@ -76,11 +77,14 @@ public class Rent
         }
     }
 
+    // Relational members
     [Required] public Guid RentableItemId { get; set; }
     public Guid? TrustedCustomerId { get; set; }
     [ForeignKey("RentableItemId")] public virtual RentableItem RentableItem { get; set; }
     [ForeignKey("TrustedCustomerId")] public virtual TrustedCustomer TrustedCustomer { get; set; }
 
+
+    // Methods
     private static void ThrowIfNotValidCustomer(Guid? trustedCustomerId, AppDbContext context)
     {
         if (context.Accounts.Find(trustedCustomerId) is not TrustedCustomer trustedCustomer) return;
@@ -94,7 +98,7 @@ public class Rent
             throw new ArgumentException("Trusted customer has reached maximum active rent limit");
     }
 
-    public float getPenaltyAmount()
+    public float GetPenaltyAmount()
     {
         var dailyPenalty = RentableItem.RentableProduct.DailyLatePenalty;
 

@@ -6,7 +6,8 @@ namespace GuitarStore.Models;
 
 public abstract class Customer : Account
 {
-    [Required] [MinimumAge(18)] public DateTime Birthdate { get; set; }
+    [Required] [MinimumAge(18)] public DateTime Birthdate { get; init; }
 
+    // Relational collection
     public virtual ICollection<Order> Orders { get; set; }
 }

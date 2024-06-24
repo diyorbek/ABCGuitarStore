@@ -20,10 +20,12 @@ public class Order
     [Required] public DateTime OrderDate { get; init; } = DateTime.Now;
     [Required] public OrderStatus OrderStatus { get; set; } = OrderStatus.PENDING;
 
+    // Relational members
     public virtual Customer Customer { get; init; }
     public virtual ICollection<OrderItem> OrderItems { get; init; }
 
-    public float getRetailPrice()
+    // Methods
+    public float GetRetailPrice()
     {
         return OrderItems.Sum(item => item.SellableProduct.Price * item.Quantity);
     }

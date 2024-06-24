@@ -11,9 +11,8 @@ public abstract class Account
 
     [Required]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
-    public string Email { get; set; }
+    public string Email { get; init; }
 
     [Required] [Length(1, 255)] public string Name { get; set; }
-
     [Required] [Length(1, 255)] public string Password { get; set; }
 }

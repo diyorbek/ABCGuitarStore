@@ -16,9 +16,11 @@ public class Store
     [Required] public Address Address { get; set; } // Complex attribute
     [Required] public string Image { get; set; }
 
+    // Relational collection
     [JsonIgnore] public virtual ICollection<ProductStore> ProductStores { get; init; }
     [JsonIgnore] public virtual ICollection<Employee> Employees { get; init; }
 
+    // Methods
     public static List<Store> FindByCity(AppDbContext context, string city)
     {
         ArgumentNullException.ThrowIfNull(context);

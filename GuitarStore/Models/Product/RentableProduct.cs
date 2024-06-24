@@ -34,14 +34,16 @@ public class RentableProduct : Product
     [Range(1, 30000, ErrorMessage = "Price should be between 1 and 30K")]
     public float PricePerRentalDay { get; set; }
 
-    public virtual ICollection<RentableItem> RentableItems { get; }
-
     public static int MaxRentDays
     {
         get => _staticFieldsService.ClassAttributes.MaxRentDays;
         set => _staticFieldsService.ClassAttributes.MaxRentDays = value;
     }
 
+    // Relational collection
+    public virtual ICollection<RentableItem> RentableItems { get; init; }
+
+    // Methods
     public static void InitializeStaticMembersService(StaticFieldsService svc)
     {
         _staticFieldsService = svc;

@@ -32,5 +32,6 @@ public class SellableProduct : Product
 
     [Required] public bool IsUsed { get; set; }
 
+    // Relational collection
     public virtual ICollection<OrderItem> OrderItems { get; init; }
 }
