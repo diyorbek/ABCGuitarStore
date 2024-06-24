@@ -2,7 +2,6 @@ using System.Security.Claims;
 using GuitarStore.DTOs;
 using GuitarStore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitarStore.Controllers;
