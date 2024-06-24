@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using GuitarStore.Contexts;
 
 namespace GuitarStore.Models.Product;
 
@@ -60,15 +61,11 @@ public abstract class Product
         GuitarType = GuitarEnum.OTHER;
     }
 
-
     [Key] public Guid Id { get; init; } = Guid.NewGuid();
 
     [Required] public CategoryEnum Category { get; init; }
-
-    [Required] [Length(1, 255)] public string Name { get; init; }
-
-    [Required] [Length(1, 1000)] public string Description { get; init; }
-
+    [Required] [Length(1, 255)] public string Name { get; set; }
+    [Required] [Length(1, 1000)] public string Description { get; set; }
     [Required] [Length(1, 10)] public List<string> Images { get; init; }
 
     public GuitarEnum? GuitarType
@@ -93,8 +90,8 @@ public abstract class Product
         get
         {
             if (Category == CategoryEnum.GUITAR)
+                // throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
                 return null;
-            // throw new ArgumentException("Used_with cannot exist for guitars.", nameof(UsedWith));
             return _usedWith;
         }
         init
@@ -105,11 +102,69 @@ public abstract class Product
         }
     }
 
-    public virtual ICollection<Manufacturer> Manufacturers { get; set; }
-    public virtual ICollection<ProductStore> ProductStores { get; set; }
+    // Relational collections
+    public virtual ICollection<Manufacturer> Manufacturers { get; init; }
+    public virtual ICollection<ProductStore> ProductStores { get; init; }
 
-    public List<Store> findAvailableStores()
+    // Methods
+    public List<Store> FindAvailableStores()
     {
         return ProductStores.SkipWhile(ps => ps.Quantity == 0).Select(ps => ps.Store).ToList();
+    }
+
+    public void AddImage(string image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        Images.Add(image);
+    }
+
+    public void RemoveImage(string image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        Images.Remove(image);
+    }
+
+    public void AddManufacturer(Manufacturer manufacturer)
+    {
+        ArgumentNullException.ThrowIfNull(manufacturer);
+        Manufacturers.Add(manufacturer);
+    }
+
+    public void RemoveManufacturer(Manufacturer manufacturer)
+    {
+        ArgumentNullException.ThrowIfNull(manufacturer);
+        Manufacturers.Remove(manufacturer);
+    }
+
+    public void AddUsedWith(GuitarEnum guitar)
+    {
+        if (Category == CategoryEnum.GUITAR)
+            throw new ArgumentException("Used_with cannot be set for guitars.", nameof(UsedWith));
+
+        UsedWith?.Add(guitar);
+    }
+
+    public static List<Product> FindByName(AppDbContext context, string name)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (string.IsNullOrEmpty(name)) throw new ArgumentException("Name cannot be null or empty", nameof(name));
+
+        return context.Products.Where(p => p.Name == name).ToList();
+    }
+
+    public static List<Product> FilterByGuitarTypes(AppDbContext context, List<GuitarEnum> guitarTypes)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(guitarTypes);
+
+        if (guitarTypes.Count == 0) throw new ArgumentException("Guitar types cannot be empty", nameof(guitarTypes));
+
+        return context.Products.Where(p =>
+                p.GuitarType != null
+                    ? guitarTypes.Contains((GuitarEnum)p.GuitarType!)
+                    : p.UsedWith!.Intersect(guitarTypes)
+                        .Any())
+            .ToList();
     }
 }

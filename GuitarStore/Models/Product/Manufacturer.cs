@@ -13,8 +13,11 @@ public class Manufacturer
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] [Length(1, 255)] public string Country { get; set; }
     [Length(1, 1000)] public string? Description { get; set; }
-    public virtual ICollection<Product> Products { get; set; }
 
+    // Relational collection
+    public virtual ICollection<Product> Products { get; init; }
+
+    // Methods
     public List<Product> GetProducts()
     {
         return Products.OrderBy(p => p.Name).ToList();

@@ -45,7 +45,7 @@ namespace GuitarStore.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasDiscriminator<string>("CustomerType").HasValue("Account");
 
@@ -72,7 +72,7 @@ namespace GuitarStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClassAttributes");
+                    b.ToTable("ClassAttributes", (string)null);
 
                     b.HasData(
                         new
@@ -104,7 +104,7 @@ namespace GuitarStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.Order", b =>
@@ -126,7 +126,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.OrderItem", b =>
@@ -150,7 +150,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("SellableProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.Product", b =>
@@ -187,7 +187,7 @@ namespace GuitarStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasDiscriminator<string>("ProductType").HasValue("Product");
 
@@ -209,7 +209,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("ProductStores");
+                    b.ToTable("ProductStores", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.Rent", b =>
@@ -242,7 +242,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("TrustedCustomerId");
 
-                    b.ToTable("Rent");
+                    b.ToTable("Rent", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.RentableItem", b =>
@@ -262,7 +262,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("RentableProductId");
 
-                    b.ToTable("RentableItems");
+                    b.ToTable("RentableItems", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Product.Store", b =>
@@ -281,7 +281,7 @@ namespace GuitarStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Stores", (string)null);
                 });
 
             modelBuilder.Entity("ManufacturerProduct", b =>
@@ -296,7 +296,7 @@ namespace GuitarStore.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("ManufacturerProduct");
+                    b.ToTable("ManufacturerProduct", (string)null);
                 });
 
             modelBuilder.Entity("GuitarStore.Models.Customer", b =>
@@ -460,7 +460,7 @@ namespace GuitarStore.Migrations
 
             modelBuilder.Entity("GuitarStore.Models.Product.Store", b =>
                 {
-                    b.OwnsOne("GuitarStore.Models.Product.Address", "Address", b1 =>
+                    b.OwnsOne("GuitarStore.Models.Product.Store.Address#GuitarStore.Models.Product.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("StoreId")
                                 .HasColumnType("TEXT");
@@ -479,7 +479,7 @@ namespace GuitarStore.Migrations
 
                             b1.HasKey("StoreId");
 
-                            b1.ToTable("Stores");
+                            b1.ToTable("Stores", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("StoreId");

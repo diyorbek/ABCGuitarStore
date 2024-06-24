@@ -59,7 +59,7 @@ public class StoreService(AppDbContext context) : IStoreService
             .ThenInclude(ps => ps.Store)
             .Where(p => p.Id == productId).FirstOrDefaultAsync();
 
-        return product?.findAvailableStores();
+        return product?.FindAvailableStores();
     }
 
     public async Task<CreateOrderErrorResponse?> ValidateOrderQuantity(Guid storeId, CreateOrderRequestDto dto)
