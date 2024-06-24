@@ -12,9 +12,27 @@ public class Manufacturer
 
     [Required] [Length(1, 255)] public string Name { get; set; }
     [Required] [Length(1, 255)] public string Country { get; set; }
-    [Length(1, 1000)] public string Description { get; set; }
+    [Length(1, 1000)] public string? Description { get; set; }
+    public virtual ICollection<Product> Products { get; set; }
 
-    public virtual ICollection<ProductManufacturer> ProductManufacturers { get; set; }
+    public List<Product> GetProducts()
+    {
+        return Products.OrderBy(p => p.Name).ToList();
+    }
+
+    public void AddProduct(Product product)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        Products.Add(product);
+    }
+
+    public void RemoveProduct(Product product)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        Products.Remove(product);
+    }
 
     public static Manufacturer? FindByName(AppDbContext context, string name)
     {

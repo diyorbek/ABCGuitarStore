@@ -27,7 +27,8 @@ public class StoreService(AppDbContext context) : IStoreService
         return await context.ProductStores
             .Include(s => s.Product)
             .Where(s => s.StoreId == storeId &&
-                        (string.IsNullOrEmpty(filters.Name) || s.Product.Name.ToLower().Contains(filters.Name.ToLower())) &&
+                        (string.IsNullOrEmpty(filters.Name) ||
+                         s.Product.Name.ToLower().Contains(filters.Name.ToLower())) &&
                         (filters.Category == null || s.Product.Category == filters.Category))
             .Select(s => (SellableProduct)s.Product)
             .ToListAsync();
@@ -35,8 +36,8 @@ public class StoreService(AppDbContext context) : IStoreService
 
     public async Task<SellableProductDetailsDto?> GetSellableProductDetailsAsync(Guid productId)
     {
-        return await context.Products.Include(p => p.ProductManufacturers)
-            .ThenInclude(p => p.Manufacturer)
+        return await context.Products
+            .Include(p => p.Manufacturers)
             .Where(p => p.Id == productId)
             .Select(p => new SellableProductDetailsDto((SellableProduct)p))
             .FirstOrDefaultAsync();

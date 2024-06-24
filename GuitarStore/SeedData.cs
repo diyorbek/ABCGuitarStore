@@ -376,8 +376,7 @@ public class SeedData
             var manufacturer = manufacturers.Find(m => prod.Name.Contains(m.Name));
 
             context.SellableProduct.Add(prod);
-            context.ProductManufacturers.Add(new ProductManufacturer
-                { ProductId = prod.Id, ManufacturerId = manufacturer?.Id ?? manufacturers[2].Id });
+            prod.Manufacturers.Add(manufacturer ?? manufacturers[2]);
             context.SaveChanges();
         });
 

@@ -3,6 +3,7 @@ using System;
 using GuitarStore.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuitarStore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240624094734_SimplifyProductManufacturerAssoc")]
+    partial class SimplifyProductManufacturerAssoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -77,7 +80,7 @@ namespace GuitarStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b17b5b6e-0512-4835-86cb-8bfe8492f159"),
+                            Id = new Guid("c6a5f924-29f8-460d-bb37-4c8d2229b736"),
                             DepositAmount = 1000f,
                             MaxActiveRents = 5,
                             MaxCommissionRate = 10,
@@ -96,6 +99,7 @@ namespace GuitarStore.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

@@ -15,11 +15,11 @@ public class ProductFiltersDto
     public CategoryEnum? Category { get; set; }
 }
 
-public class ProductManufacturerDto(Manufacturer manufacturer)
+public class ManufacturerDto(Manufacturer manufacturer)
 {
     public Guid Id { get; set; } = manufacturer.Id;
     public string Name { get; set; } = manufacturer.Name;
-    public string Description { get; set; } = manufacturer.Description;
+    public string? Description { get; set; } = manufacturer.Description;
     public string Country { get; set; } = manufacturer.Country;
 }
 
@@ -35,9 +35,8 @@ public class SellableProductDetailsDto(SellableProduct product)
     public string Description { get; set; } = product.Description;
     public List<string> Images { get; set; } = product.Images;
 
-    public ICollection<ProductManufacturerDto> ProductManufacturers { get; set; } = product.ProductManufacturers
-        .Select(pm => new ProductManufacturerDto(pm.Manufacturer))
-        .ToList();
+    public ICollection<ManufacturerDto> Manufacturers { get; set; } =
+        product.Manufacturers.Select(m => new ManufacturerDto(m)).ToList();
 }
 
 public class SellableProductQuantityDto

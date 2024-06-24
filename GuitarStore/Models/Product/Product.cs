@@ -105,7 +105,7 @@ public abstract class Product
         }
     }
 
-    public virtual ICollection<ProductManufacturer> ProductManufacturers { get; set; }
+    public virtual ICollection<Manufacturer> Manufacturers { get; set; }
     public virtual ICollection<ProductStore> ProductStores { get; set; }
 
     public List<Store> findAvailableStores()

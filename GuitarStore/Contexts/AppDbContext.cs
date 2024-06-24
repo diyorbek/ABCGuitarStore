@@ -24,7 +24,6 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<SellableProduct> SellableProduct { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
-    public DbSet<ProductManufacturer> ProductManufacturers { get; set; }
     public DbSet<Store> Stores { get; set; }
     public DbSet<ProductStore> ProductStores { get; set; }
     public DbSet<RentableProduct> RentableProducts { get; set; }
@@ -60,18 +59,22 @@ public class AppDbContext : DbContext
             .HasValue<RentableProduct>("Rentable")
             .HasValue<SellableProduct>("Sellable");
 
-        modelBuilder.Entity<ProductManufacturer>()
-            .HasKey(pm => new { pm.ProductId, pm.ManufacturerId });
+        modelBuilder.Entity<Product>()
+            .HasMany(p => p.Manufacturers)
+            .WithMany(m => m.Products);
 
-        modelBuilder.Entity<ProductManufacturer>()
-            .HasOne(pm => pm.Product)
-            .WithMany(p => p.ProductManufacturers)
-            .HasForeignKey(pm => pm.ProductId);
-
-        modelBuilder.Entity<ProductManufacturer>()
-            .HasOne(pm => pm.Manufacturer)
-            .WithMany(m => m.ProductManufacturers)
-            .HasForeignKey(pm => pm.ManufacturerId);
+        // modelBuilder.Entity<ProductManufacturer>()
+        //     .HasKey(pm => new { pm.ProductId, pm.ManufacturerId });
+        //
+        // modelBuilder.Entity<ProductManufacturer>()
+        //     .HasOne(pm => pm.Product)
+        //     .WithMany(p => p.ProductManufacturers)
+        //     .HasForeignKey(pm => pm.ProductId);
+        //
+        // modelBuilder.Entity<ProductManufacturer>()
+        //     .HasOne(pm => pm.Manufacturer)
+        //     .WithMany(m => m.ProductManufacturers)
+        //     .HasForeignKey(pm => pm.ManufacturerId);
 
         // Store configs
         modelBuilder.Entity<Store>().OwnsOne(s => s.Address);
