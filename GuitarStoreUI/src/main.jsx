@@ -3,9 +3,10 @@ import { red } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import App from './App';
 import { BreadcrumbContextProvider } from './Breadcrumb';
+import { StorageContext } from './storage';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
@@ -27,13 +28,15 @@ const theme = createTheme({
 
 root.render(
   <React.StrictMode>
-    <Router>
+    <BrowserRouter>
       <BreadcrumbContextProvider>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
+          <StorageContext>
+            <CssBaseline />
+            <App />
+          </StorageContext>
         </ThemeProvider>
       </BreadcrumbContextProvider>
-    </Router>
+    </BrowserRouter>
   </React.StrictMode>
 );

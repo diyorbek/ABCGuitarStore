@@ -1,15 +1,22 @@
-import { Box, Button, TextField } from '@mui/material';
-import { useState } from 'react';
-import { StoreList } from './StoreList';
+import { Box, Button, Container, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { Breadcrumb } from './Breadcrumb';
+import { StoreList } from './StoreList';
 
 export function Home() {
+  const [searchParams, setSearchParam] = useSearchParams();
+
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
-  const [query, setQuery] = useState({ name, city });
+
+  useEffect(() => {
+    setName(searchParams.get('name') || '');
+    setCity(searchParams.get('city') || '');
+  }, [searchParams]);
 
   return (
-    <>
+    <Container maxWidth="sm">
       <Box margin="auto" paddingTop={2}>
         <Breadcrumb />
       </Box>
@@ -20,7 +27,8 @@ export function Home() {
           component="form"
           onSubmit={(event) => {
             event.preventDefault();
-            setQuery({ name, city });
+            setSearchParam({ name, city });
+            // setQuery({ name, city });
           }}
           alignSelf="center"
           display="flex"
@@ -44,7 +52,7 @@ export function Home() {
         </Box>
       </Box>
 
-      <StoreList {...query} />
-    </>
+      <StoreList />
+    </Container>
   );
 }

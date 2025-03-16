@@ -7,11 +7,15 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 
 import { useFetch } from './api';
 
-export function StoreList({ name, city }) {
+export function StoreList() {
+  const [searchParams] = useSearchParams();
+  const name = searchParams.get('name') || '';
+  const city = searchParams.get('city') || '';
+
   const { data, loading, error } = useFetch(`/store?name=${name}&city=${city}`);
 
   if (error) {

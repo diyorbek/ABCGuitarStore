@@ -8,10 +8,11 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router';
 import { Home } from './Home';
 import { ProductDetails } from './ProductDetails';
 import { Products } from './Products';
+import { ShoppingCart } from './ShoppingCart';
 import { useAuth } from './api';
 
 function App() {
@@ -54,26 +55,20 @@ function App() {
               <Button variant="contained" to="/" component={Link}>
                 Home
               </Button>
+
+              <ShoppingCart />
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
 
-      <Switch>
-        <Route path="/:storeId/:productId" exact>
-          <ProductDetails />
-        </Route>
+      <Routes>
+        <Route path="/:storeId/:productId" Component={ProductDetails} />
 
-        <Route path="/:storeId" exact>
-          <Products />
-        </Route>
+        <Route path="/:storeId" Component={Products} />
 
-        <Route path="/" exact>
-          <Container maxWidth="sm">
-            <Home />
-          </Container>
-        </Route>
-      </Switch>
+        <Route index Component={Home} />
+      </Routes>
     </>
   );
 }

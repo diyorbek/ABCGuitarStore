@@ -14,14 +14,14 @@ import {
   colors,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { Breadcrumb } from './Breadcrumb';
 import { ConfirmDialog } from './ConfirmDialog';
 import { useFetch, useMakeOrderMutation } from './api';
 import { priceFormatter } from './utils';
 
 export function ProductDetails() {
-  const { params } = useRouteMatch();
+  const params = useParams();
   const store = useFetch(`/store/${params.storeId}`);
   const { data, loading, error } = useFetch(`/product/${params.productId}`);
 

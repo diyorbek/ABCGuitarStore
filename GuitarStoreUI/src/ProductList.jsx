@@ -1,3 +1,4 @@
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {
   Box,
   Card,
@@ -6,15 +7,18 @@ import {
   CardMedia,
   CircularProgress,
   Grid,
+  IconButton,
   Typography,
   colors,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-
+import { Link } from 'react-router';
 import { useFetch } from './api';
+import { useShoppingCart } from './storage';
 import { priceFormatter } from './utils';
 
 export function ProductList({ storeId, name, category }) {
+  const { addToCart } = useShoppingCart();
+
   const { data, loading, error } = useFetch(
     `/store/${storeId}?name=${name}&category=${category}`
   );
@@ -92,6 +96,15 @@ export function ProductList({ storeId, name, category }) {
                 <Typography fontWeight="bold" fontSize={30}>
                   {priceFormatter.format(product.price)}
                 </Typography>
+
+                <IconButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart(product);
+                  }}
+                >
+                  <AddShoppingCartIcon />
+                </IconButton>
               </CardContent>
             </CardActionArea>
           </Card>

@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router';
 import { Breadcrumb } from './Breadcrumb';
 import { ProductList } from './ProductList';
 import { useFetch } from './api';
@@ -23,7 +23,7 @@ export function Products() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
-  const { params } = useRouteMatch();
+  const params = useParams();
   const [name, setName] = useState(searchParams.get('name') || '');
   const [category, setCategory] = useState('');
   const [query, setQuery] = useState({ name, category });
